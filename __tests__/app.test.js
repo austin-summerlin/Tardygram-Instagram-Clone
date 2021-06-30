@@ -42,4 +42,20 @@ describe('routes', () => {
       profilePhotoUrl: 'photo'
     });
   });
+  it('creates a post via POST', async () => {
+    const res = await request(app)
+      .post('/api/v1/posts')
+      .send({
+        user: 'spob',
+        photoUrl: 'photo',
+        caption: 'Look at this photo',
+        tags: ['#summer', '#nofilter']
+      });
+    expect(res.body).toEqual({
+      user: 'spob',
+      photoUrl: 'photo',
+      caption: 'Look at this photo',
+      tags: ['#summer', '#nofilter']
+    });
+  });
 });
