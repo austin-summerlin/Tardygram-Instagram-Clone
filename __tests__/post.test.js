@@ -67,7 +67,7 @@ describe('routes', () => {
       caption: 'hi!!!',
       tags: ['cute']
     });
-    const res = await agent.get('/api/v1/posts');
+    const res = await agent.get(`/api/v1/posts/${post.id}`);
     expect(res.body).toEqual(post);
   });
 });
