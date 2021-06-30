@@ -7,7 +7,7 @@ import Post from '../lib/models/Post.js';
 
 describe('routes', () => {
 
-  let user = {};
+  let user;
   let agent;
 
   beforeEach(async () => {
