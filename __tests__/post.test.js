@@ -70,5 +70,28 @@ describe('routes', () => {
     const res = await agent.get(`/api/v1/posts/${post.id}`);
     expect(res.body).toEqual(post);
   });
+  it('updates a post via PATCH', async () => {
+    const post = await Post.insert({
+      userId: user.id,
+      photoUrl: 'photo',
+      caption: 'hi!!!',
+      tags: ['cute']
+    });
+
+    post.caption = 'HIIIIIIIIIIIIII!!!!!!!!!!!!!!';
+
+    const res = await agent
+      .patch(`/api/v1/posts/${post.id}`)
+      .send({ caption: 'HIIIIIIIIIIIIII!!!!!!!!!!!!!!' });
+
+    expect(res.body).toEqual({
+      userId: user.id,
+      photoUrl: 'photo',
+      caption: 'HIIIIIIIIIIIIII!!!!!!!!!!!!!!',
+      tags: ['cute']
+    });
+    expect(res.body.caption).not.toEqual('hi!!!');
+
+  });
 });
 
