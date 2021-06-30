@@ -21,5 +21,18 @@ describe('routes', () => {
       email: 'test@test.com',
       profilePhotoUrl: expect.any(String)
     });
+
+    it('logsin a user via POST', async () => {
+      const res = await request(app)
+        .post('/api/v1/auth/login')
+        .send({
+          email: 'test@test.com',
+          password: 'password'
+        });
+      expect(res.body).toEqual({
+        id: '1',
+        email: 'test@test.com'
+      });
+    });
   });
 });
