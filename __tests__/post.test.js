@@ -60,4 +60,15 @@ describe('routes', () => {
       .get('/api/v1/posts');
     expect(res.body).toEqual([post1, post2]);
   });
+  it('gets a post by id', async () => {
+    const post = await Post.insert({
+      userId: user.id,
+      photoUrl: 'photo',
+      caption: 'hi!!!',
+      tags: ['cute']
+    });
+    const res = await agent.get('/api/v1/posts');
+    expect(res.body).toEqual(post);
+  });
 });
+
