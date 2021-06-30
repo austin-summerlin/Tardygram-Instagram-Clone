@@ -85,6 +85,7 @@ describe('routes', () => {
       .send({ caption: 'HIIIIIIIIIIIIII!!!!!!!!!!!!!!' });
 
     expect(res.body).toEqual({
+      id: '1',
       userId: user.id,
       photoUrl: 'photo',
       caption: 'HIIIIIIIIIIIIII!!!!!!!!!!!!!!',
