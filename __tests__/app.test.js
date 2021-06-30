@@ -13,11 +13,13 @@ describe('routes', () => {
       .post('/api/v1/auth/signup')
       .send({
         email: 'test@test.com',
-        password: 'password'
+        password: 'password',
+        profilePhotoUrl: expect.any(String)
       });
     expect(res.body).toEqual({
       id: '1',
-      email: 'test@test.com'
+      email: 'test@test.com',
+      profilePhotoUrl: expect.any(String)
     });
   });
 });
