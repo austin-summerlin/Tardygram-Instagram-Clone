@@ -4,6 +4,7 @@ import request from 'supertest';
 import app from '../lib/app.js';
 import UserService from '../lib/services/UserService.js';
 
+
 describe('routes', () => {
   beforeEach(() => {
     return setup(pool);
@@ -24,7 +25,7 @@ describe('routes', () => {
     });
   });
 
-  it('logsin a user via POST', async () => {
+  it('log in a user via POST', async () => {
     const user = await UserService.create({
       username: 'spob',
       password: 'password',
@@ -42,20 +43,28 @@ describe('routes', () => {
       profilePhotoUrl: 'photo'
     });
   });
-  it('creates a post via POST', async () => {
-    const res = await request(app)
-      .post('/api/v1/posts')
+
+  it.skip('verify a user is logged in', async () => {
+    const agent = request.agent(app);
+    const user = await UserService.create({
+      username: 'spob',
+      password: 'password',
+      profilePhotoUrl: 'photo'
+    });
+    await agent.post('/api/v1/auth/login')
       .send({
-        user: 'spob',
-        photoUrl: 'photo',
-        caption: 'Look at this photo',
-        tags: ['#summer', '#nofilter']
+        username: 'spob',
+        password: 'password'
       });
+    const res = await agent.get('/api/v1/verify');
+
     expect(res.body).toEqual({
-      user: 'spob',
-      photoUrl: 'photo',
-      caption: 'Look at this photo',
-      tags: ['#summer', '#nofilter']
+      id: user.id,
+      username: 'spob',
+      passwordHash: expect.any(String),
+      profilePhotoUrl: 'photo',
+      iat: expect.any(Number),
+      exp: expect.any(Number)
     });
   });
 });
