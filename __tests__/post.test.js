@@ -94,5 +94,19 @@ describe('routes', () => {
     expect(res.body.caption).not.toEqual('hi!!!');
 
   });
+  it('deletes a post via DELETE', async () => {
+    const post = await Post.insert({
+      userId: user.id,
+      photoUrl: 'photo',
+      caption: 'hi!!!',
+      tags: ['cute']
+    });
+    const res = await agent
+      .delete(`/api/v1/posts/${post.id}`)
+      .send(post);
+
+    expect(res.body).toEqual(post);
+  });
+
 });
 
