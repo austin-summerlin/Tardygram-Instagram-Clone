@@ -25,6 +25,11 @@ describe('routes', () => {
   });
 
   it('logsin a user via POST', async () => {
+    const user = await UserService.create({
+      username: 'spob',
+      password: 'password',
+      profilePhotoUrl: 'photo'
+    });
     const res = await request(app)
       .post('/api/v1/auth/login')
       .send({
@@ -32,8 +37,9 @@ describe('routes', () => {
         password: 'password'
       });
     expect(res.body).toEqual({
-      id: '1',
-      username: 'spob'
+      id: user.id,
+      username: 'spob',
+      profilePhotoUrl: 'photo'
     });
   });
 });
