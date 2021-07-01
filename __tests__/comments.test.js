@@ -4,11 +4,13 @@ import request from 'supertest';
 import app from '../lib/app.js';
 import UserService from '../lib/services/UserService.js';
 import Post from '../lib/models/Post.js';
+import Comment from '../lib/models/Comment.js';
 
 const agent = request.agent(app);
 
 describe('comment routes', () => {
   let user;
+  let post;
 
 
   beforeEach(async () => {
@@ -27,6 +29,14 @@ describe('comment routes', () => {
         password: 'password',
         profilePhotoUrl: 'photoURL'
       });
+
+    post = await Post.insert({
+      id: '1',
+      userId: user.id,
+      photoUrl: 'photo',
+      caption: 'HIIIIIIIIIIIIII!!!!!!!!!!!!!!',
+      tags: ['cute']
+    });
   });
 
   it('creates a comment via POST', async () => {
@@ -49,5 +59,17 @@ describe('comment routes', () => {
       postId: post.id,
       comment: 'Yo yo yo look at this!'
     });
+  });
+  it('deletes a comment via DELETE', async () => {
+    const comment = await Comment.insert({
+      commentBy: user.id,
+      postId: post.id,
+      comment: 'look at this!'
+    });
+    const res = await agent
+      .delete(`/api/v1/comments/${comment.id}`)
+      .send(post);
+
+    expect(res.body).toEqual(comment);
   });
 });
