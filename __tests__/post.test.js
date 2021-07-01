@@ -4,6 +4,7 @@ import request from 'supertest';
 import app from '../lib/app.js';
 import UserService from '../lib/services/UserService.js';
 import Post from '../lib/models/Post.js';
+import Comment from '../lib/models/Comment.js';
 
 describe('routes', () => {
 
@@ -60,6 +61,7 @@ describe('routes', () => {
       .get('/api/v1/posts');
     expect(res.body).toEqual([post1, post2]);
   });
+
   it('gets a post by id', async () => {
     const post = await Post.insert({
       userId: user.id,
@@ -67,9 +69,17 @@ describe('routes', () => {
       caption: 'hi!!!',
       tags: ['cute']
     });
+
+    await Comment.insert({
+      commentBy: user.id,
+      postId: post.id,
+      comment: 'Fun Stuff'
+    });
+
     const res = await agent.get(`/api/v1/posts/${post.id}`);
     expect(res.body).toEqual(post);
   });
+
   it('updates a post via PATCH', async () => {
     const post = await Post.insert({
       userId: user.id,
@@ -92,8 +102,8 @@ describe('routes', () => {
       tags: ['cute']
     });
     expect(res.body.caption).not.toEqual('hi!!!');
-
   });
+
   it('deletes a post via DELETE', async () => {
     const post = await Post.insert({
       userId: user.id,
