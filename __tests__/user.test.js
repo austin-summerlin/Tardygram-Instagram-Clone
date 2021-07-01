@@ -5,7 +5,7 @@ import app from '../lib/app.js';
 import UserService from '../lib/services/UserService.js';
 
 
-describe('routes', () => {
+describe('auth routes', () => {
   beforeEach(() => {
     return setup(pool);
   });
@@ -16,12 +16,12 @@ describe('routes', () => {
       .send({
         username: 'spob',
         password: 'password',
-        profilePhotoUrl: expect.any(String)
+        profilePhotoUrl: 'photo'
       });
     expect(res.body).toEqual({
       id: '1',
       username: 'spob',
-      profilePhotoUrl: expect.any(String)
+      profilePhotoUrl: 'photo'
     });
   });
 
@@ -44,7 +44,7 @@ describe('routes', () => {
     });
   });
 
-  it.skip('verify a user is logged in', async () => {
+  it('verify a user is logged in', async () => {
     const agent = request.agent(app);
     const user = await UserService.create({
       username: 'spob',
@@ -54,7 +54,8 @@ describe('routes', () => {
     await agent.post('/api/v1/auth/login')
       .send({
         username: 'spob',
-        password: 'password'
+        password: 'password',
+        profilePhotoUrl: 'photo'
       });
     const res = await agent.get('/api/v1/verify');
 
