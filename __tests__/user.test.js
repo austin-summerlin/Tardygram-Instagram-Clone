@@ -51,12 +51,14 @@ describe('auth routes', () => {
       password: 'password',
       profilePhotoUrl: 'photo'
     });
+
     await agent.post('/api/v1/auth/login')
       .send({
         username: 'spob',
         password: 'password',
         profilePhotoUrl: 'photo'
       });
+
     const res = await agent.get('/api/v1/verify');
 
     expect(res.body).toEqual({
